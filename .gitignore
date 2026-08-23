@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.venv/
+.idea/
+.vscode/
+
+# Raw/prepared source data and duplicate archives are not part of this repository.
+data/prepared_us101_n_20_full_year/
+data/*.zip
+
+# Runtime scratch files.
+*.log
+*.tmp

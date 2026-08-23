@@ -1,0 +1,23 @@
+{
+  "generated_graph_count": 2,
+  "consecutive_pairs": 1,
+  "mean_edge_jaccard": 0.5873015873015873,
+  "mean_weighted_cosine": 0.8910752101343565,
+  "mean_relative_frobenius_change": 0.4818852861659248,
+  "pairs": [
+    {
+      "previous_graph_slot": 0,
+      "current_graph_slot": 1,
+      "slot_gap": 1,
+      "previous_edges": 100,
+      "current_edges": 100,
+      "intersection_edges": 74,
+      "union_edges": 126,
+      "added_edges": 26,
+      "removed_edges": 26,
+      "edge_jaccard": 0.5873015873015873,
+      "weighted_cosine": 0.8910752101343565,
+      "relative_frobenius_change": 0.4818852861659248
+    }
+  ]
+}

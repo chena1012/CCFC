@@ -1,0 +1,59 @@
+{
+  "source": "D:\\A\\Documents\\2026大创\\stage3_dynamic_pcmci\\data\\prepared_us101_n_20_full_year\\xtraffic_2023_subgraph.npz",
+  "shape": [
+    105120,
+    20,
+    3
+  ],
+  "timestamp_start": "2023-01-01 00:00:00",
+  "timestamp_end": "2023-12-31 23:55:00",
+  "cadence_seconds": 300,
+  "node_count": 20,
+  "feature_names": [
+    "flow",
+    "occupancy",
+    "speed"
+  ],
+  "variable_count": 60,
+  "split": {
+    "train": [
+      "2023-01-01 00:00:00",
+      "2023-08-31 23:55:00"
+    ],
+    "val": [
+      "2023-09-01 00:00:00",
+      "2023-10-31 23:55:00"
+    ],
+    "test": [
+      "2023-11-01 00:00:00",
+      "2023-12-31 23:55:00"
+    ]
+  },
+  "missing_cells_original": 15189,
+  "short_gap_cells_filled_for_pcmci": 720,
+  "long_gap_cells_remaining_for_pcmci": 14469,
+  "long_gap_cells_imputed_for_model": 14469,
+  "model_ready_nonfinite_cells": 0,
+  "normalization_fitted_on": "training period only",
+  "normalization_mean_by_feature": {
+    "flow": 157.7800750732422,
+    "occupancy": 0.04961421713232994,
+    "speed": 63.65968704223633
+  },
+  "normalization_std_by_feature": {
+    "flow": 135.4111785888672,
+    "occupancy": 0.03955569863319397,
+    "speed": 6.716479778289795
+  },
+  "pcmci_schedule": {
+    "history_days": 7,
+    "window_steps": 2016,
+    "update_hours": 24,
+    "candidate_graph_slots": 358,
+    "valid_graph_slots": 341,
+    "invalid_graph_slots": 17,
+    "invalid_slots_reuse_latest_valid_graph": true
+  },
+  "target_feature": "flow",
+  "target_missing_values_are_masked_in_loss_and_evaluation": true
+}

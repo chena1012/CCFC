@@ -1,0 +1,2 @@
+﻿previous_graph_slot,current_graph_slot,slot_gap,previous_edges,current_edges,intersection_edges,union_edges,added_edges,removed_edges,edge_jaccard,weighted_cosine,relative_frobenius_change
+0,1,1,100,100,74,126,26,26,0.5873015873015873,0.8910752101343565,0.4818852861659248

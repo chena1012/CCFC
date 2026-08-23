@@ -1,0 +1,22 @@
+{
+  "data_dir": "D:\\A\\Documents\\2026大创\\stage3_dynamic_pcmci\\data\\cleaned_us101_n_20_full_year",
+  "variable_count": 60,
+  "target_feature": "flow",
+  "tau_min": 1,
+  "tau_max": 12,
+  "pc_alpha": 0.05,
+  "fdr_alpha": 0.05,
+  "top_k_incoming_nodes": 5,
+  "completed_this_run": [
+    {
+      "graph_slot": 1,
+      "runtime_seconds": 202.29175880000003,
+      "finite_lagged_tests": 43200,
+      "significant_flow_target_variable_edges": 1846,
+      "significant_node_edges": 325,
+      "top_k_node_edges": 100,
+      "graph_path": "D:\\A\\Documents\\2026大创\\stage3_dynamic_pcmci\\dynamic_graphs\\per_window\\graph_0001.npz",
+      "edge_path": "D:\\A\\Documents\\2026大创\\stage3_dynamic_pcmci\\dynamic_graphs\\per_window\\graph_0001_edges.csv"
+    }
+  ]
+}
