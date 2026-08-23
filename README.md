@@ -74,3 +74,84 @@ After more than one graph exists, regenerate stability metrics with:
 ```
 
 The current serial estimate for all 341 valid windows is approximately 20 CPU-hours. Parallel speed depends on available physical cores and memory bandwidth.
+
+## Dynamic Graph WaveNet interface
+
+`dynamic_graph_provider.py` and `graphwavenet_dynamic_adapter.py` implement the
+Stage 3 model interface without modifying the original Graph WaveNet source.
+For each prediction sample the provider:
+
+1. finds the latest graph schedule time not later than the prediction time;
+2. follows the manifest's assigned valid graph slot;
+3. requires that exact graph file to exist;
+4. verifies `graph_time_index <= target_index` before returning adjacency.
+
+This prevents future information leakage and also prevents an incomplete graph
+generation run from silently reusing an old graph for later months. Invalid
+PCMCI windows may intentionally reuse the latest earlier valid graph because
+that assignment is recorded explicitly in the manifest.
+
+Install the model-side dependencies with:
+
+```powershell
+& '.\.venv\Scripts\python.exe' -m pip install -r requirements-graphwavenet.txt
+```
+
+Create the provider, dataset, and adapter as follows. The original Graph WaveNet
+must be constructed with two placeholder supports so its GCN input channel sizes
+are correct; the placeholders are replaced by each batch's forward and reverse
+PCMCI supports during the forward pass.
+
+```python
+from pathlib import Path
+import torch
+from torch.utils.data import DataLoader
+from model import gwnet
+
+from dynamic_graph_provider import DynamicPCMCIProvider
+from graphwavenet_dynamic_adapter import (
+    DynamicGraphWaveNetAdapter,
+    FullYearGraphWaveNetDataset,
+)
+
+root = Path(__file__).resolve().parent
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+data_dir = root / "data" / "cleaned_us101_n_20_full_year"
+provider = DynamicPCMCIProvider(
+    data_dir / "dynamic_pcmci_window_manifest.npz",
+    root / "dynamic_graphs" / "per_window",
+)
+
+dataset = FullYearGraphWaveNetDataset(
+    data_dir / "full_year_cleaned.npz",
+    data_dir / "split_indices.npz",
+    split="train",
+    provider=provider,
+    only_generated_graphs=True,
+)
+loader = DataLoader(dataset, batch_size=32, shuffle=False)
+
+placeholders = [torch.eye(20, device=device), torch.eye(20, device=device)]
+base_model = gwnet(
+    device,
+    num_nodes=20,
+    supports=placeholders,
+    in_dim=3,
+    # keep the remaining experiment arguments unchanged
+)
+model = DynamicGraphWaveNetAdapter(base_model, provider).to(device)
+
+for history, target, target_index in loader:
+    prediction = model.forward_history_batch(
+        history.to(device), target_index
+    )
+    # Training loss and optimizer steps can be added after all graphs exist.
+```
+
+The included two graph files currently cover 576 five-minute training samples.
+Later samples are deliberately rejected until their required graph files have
+been generated. Run the complete interface and leakage test suite with:
+
+```powershell
+& '.\.venv\Scripts\python.exe' test_dynamic_graph_interface.py
+```
